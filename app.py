@@ -241,30 +241,31 @@ def main() -> None:
         unsafe_allow_html=True,
     )
 
-    # Verificación del estado de la API Key en .env
+    # Verificación del estado de la API Key en .env (opcional para la lectura de texto de Gemini; la imagen funciona siempre)
     api_key = get_api_key()
     if not api_key:
-        st.warning(
-            "**Falta configurar tu `GEMINI_API_KEY`**: Para transformar el rostro con Google Gemini, "
-            "obtené una clave gratuita en [Google AI Studio (aistudio.google.com/apikey)](https://aistudio.google.com/apikey) "
-            "y pegala aquí abajo (se guardará automáticamente en tu archivo `.env` local):"
-        )
-        k_col1, k_col2 = st.columns([3, 1])
-        with k_col1:
-            input_key = st.text_input(
-                "Pegá tu API Key de Google AI Studio",
-                type="password",
-                placeholder="AIzaSy...",
-                label_visibility="collapsed",
+        with st.expander("🔑 Opcional: Configurar GEMINI_API_KEY (la generación visual funciona igual sin clave)", expanded=False):
+            st.caption(
+                "El **Motor de Esculpido y Geometría Sagrada 3D** funciona inmediatamente sin necesidad de clave. "
+                "Si además querés activar la conexión con la nube de Google Gemini AI, podés pegar una clave gratuita de "
+                "[Google AI Studio](https://aistudio.google.com/apikey) aquí:"
             )
-        with k_col2:
-            if st.button("🔑 Guardar API Key en .env", use_container_width=True):
-                if input_key and len(input_key.strip()) > 15:
-                    save_api_key_to_env(input_key)
-                    st.success("¡API Key guardada en `.env` correctamente!")
-                    st.rerun()
-                else:
-                    st.error("Ingresá una clave válida de Google AI Studio.")
+            k_col1, k_col2 = st.columns([3, 1])
+            with k_col1:
+                input_key = st.text_input(
+                    "Pegá tu API Key de Google AI Studio",
+                    type="password",
+                    placeholder="AIzaSy...",
+                    label_visibility="collapsed",
+                )
+            with k_col2:
+                if st.button("🔑 Guardar API Key en .env", use_container_width=True):
+                    if input_key and len(input_key.strip()) > 15:
+                        save_api_key_to_env(input_key)
+                        st.success("¡API Key guardada en `.env` correctamente!")
+                        st.rerun()
+                    else:
+                        st.error("Ingresá una clave válida de Google AI Studio.")
 
     col_left, col_center, col_right = st.columns([1.15, 1.05, 1.25], gap="large")
 
